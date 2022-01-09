@@ -1,4 +1,10 @@
 ---
+- name: "Install powertools dependencies: dnf-plugins-core"
+  shell: "pkcon install -y dnf-plugins-core"
+  ignore_errors: true
+- name: "Enable powertools repo"
+  shell: "pkcon repo-enable powertools"
+  ignore_errors: true
 - name: "Install dependencies: {{ APP_DEPENDENCIES | join(' ') }}"
   shell: "pkcon install -y {{ item }} | true"
   loop: "{{ APP_DEPENDENCIES }}"
@@ -16,6 +22,31 @@
     dest: "{{ APP_SRC }}"
     version: "{{ APP_TAG }}"
   when: not APP_README_PATH.stat.exists
+- name: "Run the svn cleanup in case subversion failed"
+  shell:
+    cmd: svn cleanup
+    chdir: "{{ APP_ASSETS_SRC }}"
+  ignore_errors: true
+- name: "Clone the stk-assets source code into {{ APP_ASSETS_SRC }}"
+  ansible.builtin.subversion:
+    repo: "{{ APP_ASSETS_REPO }}"
+    dest: "{{ APP_ASSETS_SRC }}"
+  ignore_errors: true
+- name: "Run the svn cleanup in case subversion failed"
+  shell:
+    cmd: svn cleanup
+    chdir: "{{ APP_ASSETS_SRC }}"
+  ignore_errors: true
+- name: "Clone the stk-assets source code into {{ APP_ASSETS_SRC }}"
+  ansible.builtin.subversion:
+    repo: "{{ APP_ASSETS_REPO }}"
+    dest: "{{ APP_ASSETS_SRC }}"
+  ignore_errors: true
+- name: "Run the svn cleanup in case subversion failed"
+  shell:
+    cmd: svn cleanup
+    chdir: "{{ APP_ASSETS_SRC }}"
+  ignore_errors: true
 - name: "Clone the stk-assets source code into {{ APP_ASSETS_SRC }}"
   ansible.builtin.subversion:
     repo: "{{ APP_ASSETS_REPO }}"
