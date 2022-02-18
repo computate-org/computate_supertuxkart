@@ -1,7 +1,38 @@
 ---
+- name: "Install dependencies: dnf-plugins-core, yum-utils"
+  ansible.builtin.package:
+    name: 
+      - dnf-plugins-core
+      - yum-utils
+  become: true
+  register: INSTALL_POWERTOOLS
+  ignore_errors: true
+- name: "Install dependencies: dnf-plugins-core, yum-utils"
+  shell: "pkcon install -y {{ item }} | true"
+  loop:
+    - dnf-plugins-core
+    - yum-utils
+  when: INSTALL_POWERTOOLS.failed
+- name: "Enable powertools repo"
+  shell: "yum-config-manager --enable powertools"
+  ignore_errors: true
+  become: true
+  register: ENABLE_POWERTOOLS
+- name: "Enable powertools repo"
+  shell: "pkcon repo-enable powertools"
+  ignore_errors: true
+  become: true
+  when: ENABLE_POWERTOOLS.failed
+- name: "Install dependencies: {{ APP_DEPENDENCIES | join(' ') }}"
+  package:
+    name: "{{ APP_DEPENDENCIES }}"
+  become: true
+  register: INSTALL_DEPENDENCIES
+  ignore_errors: true
 - name: "Install dependencies: {{ APP_DEPENDENCIES | join(' ') }}"
   shell: "pkcon install -y {{ item }} | true"
   loop: "{{ APP_DEPENDENCIES }}"
+  when: INSTALL_DEPENDENCIES.failed
 - name: "Create the directory {{ APP_SRC }}"
   file:
     name: "{{ APP_SRC }}"

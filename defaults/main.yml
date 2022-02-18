@@ -1,12 +1,10 @@
 ---
 APP_PYTHON: "{{ '/usr/bin/python' if lookup('file', '/usr/bin/python', errors='ignore') else '/usr/bin/python3' }}"
 APP_DEPENDENCIES_REDHAT:
-  - angelscript-devel
   - bluez-libs-devel
   - cmake
   - desktop-file-utils
   - SDL2-devel
-  - freealut-devel
   - freetype-devel
   - gcc-c++
   - git-core
@@ -23,7 +21,6 @@ APP_DEPENDENCIES_REDHAT:
   - libogg-devel
   - openssl-devel 
   - pkgconf
-  - wiiuse-devel
   - zlib-devel
 APP_DEPENDENCIES: "{{ APP_DEPENDENCIES_REDHAT if ansible_distribution_file_variety == 'RedHat' else APP_DEPENDENCIES_REDHAT }}"
 APP_NAME: supertuxkart
