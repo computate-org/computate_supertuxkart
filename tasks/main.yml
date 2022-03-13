@@ -1,35 +1,13 @@
 ---
-- name: "Install dependencies: dnf-plugins-core, yum-utils"
-  ansible.builtin.package:
-    name: 
-      - dnf-plugins-core
-      - yum-utils
-  become: true
-  register: INSTALL_POWERTOOLS
-  ignore_errors: true
-- name: "Install dependencies: dnf-plugins-core, yum-utils"
-  shell: "pkcon install -y {{ item }} | true"
-  loop:
-    - dnf-plugins-core
-    - yum-utils
-  when: INSTALL_POWERTOOLS.failed
-- name: "Enable powertools repo"
-  shell: "yum-config-manager --enable powertools"
-  ignore_errors: true
-  become: true
-  register: ENABLE_POWERTOOLS
-- name: "Enable powertools repo"
-  shell: "pkcon repo-enable powertools"
-  ignore_errors: true
-  become: true
-  when: ENABLE_POWERTOOLS.failed
-- name: "Install dependencies: {{ APP_DEPENDENCIES | join(' ') }}"
+- include_role:
+    name: computate.computate_powertools
+- name: "Install dependencies as root: {{ APP_DEPENDENCIES | join(' ') }}"
   package:
     name: "{{ APP_DEPENDENCIES }}"
   become: true
   register: INSTALL_DEPENDENCIES
   ignore_errors: true
-- name: "Install dependencies: {{ APP_DEPENDENCIES | join(' ') }}"
+- name: "Install dependencies as user {{ APP_USER }}: {{ APP_DEPENDENCIES | join(' ') }}"
   shell: "pkcon install -y {{ item }} | true"
   loop: "{{ APP_DEPENDENCIES }}"
   when: INSTALL_DEPENDENCIES.failed
@@ -41,12 +19,20 @@
   stat:
     path: "{{ APP_README }}"
   register: APP_README_PATH
-- name: "Clone the {{ APP_REPO }} source code into {{ APP_SRC }}"
-  git:
-    repo: "{{ APP_REPO }}"
+- name: "Clone the {{ APP_REPO_SSH }} source code into {{ APP_SRC }}"
+  ansible.builtin.git:
+    repo: "{{ APP_REPO_SSH }}"
     dest: "{{ APP_SRC }}"
     version: "{{ APP_TAG }}"
+  ignore_errors: true
   when: not APP_README_PATH.stat.exists
+  register: CLONE_REPO
+- name: "Clone the {{ APP_REPO_HTTPS }} source code into {{ APP_SRC }}"
+  ansible.builtin.git:
+    repo: "{{ APP_REPO_HTTPS }}"
+    dest: "{{ APP_SRC }}"
+    version: "{{ APP_TAG }}"
+  when: not APP_README_PATH.stat.exists and CLONE_REPO.failed
 - name: "Run the svn cleanup in case subversion failed"
   shell:
     cmd: svn cleanup
