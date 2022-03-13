@@ -29,7 +29,6 @@ APP_DISPLAY_NAME: Super Tux Kart
 APP_GENERIC_NAME: Car Racing Game
 APP_COMMENT: Race carts
 APP_USER: "{{ lookup('env', 'USER') }}"
-APP_GROUP: "{{ APP_USER }}"
 APP_PREFIX: "/home/{{ APP_USER }}/.local"
 APP_SRC: "{{ APP_PREFIX }}/src/stk-code"
 APP_ASSETS_SRC: "{{ APP_PREFIX }}/src/stk-assets"
