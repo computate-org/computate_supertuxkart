@@ -30,6 +30,7 @@ APP_GENERIC_NAME: Car Racing Game
 APP_COMMENT: Race carts
 APP_USER: "{{ lookup('env', 'USER') }}"
 APP_PREFIX: "/home/{{ APP_USER }}/.local"
+APP_ROOT: "{{ false if APP_PREFIX is regex('^/home') else true }}"
 APP_SRC: "{{ APP_PREFIX }}/src/stk-code"
 APP_ASSETS_SRC: "{{ APP_PREFIX }}/src/stk-assets"
 APP_SHARE: "{{ APP_PREFIX }}/share/{{ APP_NAME  }}"
