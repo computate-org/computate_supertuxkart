@@ -19,6 +19,12 @@
     state: directory
     owner: "{{ APP_USER }}"
   become: "{{ APP_ROOT }}"
+- name: "Create the directory {{ APP_ASSETS_SRC }}"
+  file:
+    name: "{{ APP_ASSETS_SRC }}"
+    state: directory
+    owner: "{{ APP_USER }}"
+  become: "{{ APP_ROOT }}"
 - name: "Check for the README file {{ APP_README }}"
   stat:
     path: "{{ APP_README }}"
@@ -28,7 +34,6 @@
     repo: "{{ APP_REPO_SSH }}"
     dest: "{{ APP_SRC }}"
     version: "{{ APP_TAG }}"
-    owner: "{{ APP_USER }}"
   ignore_errors: true
   when: not APP_README_PATH.stat.exists
   register: CLONE_REPO
@@ -37,7 +42,6 @@
     repo: "{{ APP_REPO_HTTPS }}"
     dest: "{{ APP_SRC }}"
     version: "{{ APP_TAG }}"
-    owner: "{{ APP_USER }}"
   when: not APP_README_PATH.stat.exists and CLONE_REPO.failed
 - name: "Run the svn cleanup in case subversion failed"
   shell:
@@ -48,7 +52,6 @@
   ansible.builtin.subversion:
     repo: "{{ APP_ASSETS_REPO }}"
     dest: "{{ APP_ASSETS_SRC }}"
-    owner: "{{ APP_USER }}"
   ignore_errors: true
 - name: "Run the svn cleanup in case subversion failed"
   shell:
@@ -59,7 +62,6 @@
   ansible.builtin.subversion:
     repo: "{{ APP_ASSETS_REPO }}"
     dest: "{{ APP_ASSETS_SRC }}"
-    owner: "{{ APP_USER }}"
   ignore_errors: true
 - name: "Run the svn cleanup in case subversion failed"
   shell:
@@ -70,7 +72,6 @@
   ansible.builtin.subversion:
     repo: "{{ APP_ASSETS_REPO }}"
     dest: "{{ APP_ASSETS_SRC }}"
-    owner: "{{ APP_USER }}"
   ignore_errors: true
 - name: "Create the directory {{ APP_SRC }}/cmake_build"
   file:
