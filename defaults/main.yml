@@ -12,7 +12,6 @@ APP_DEPENDENCIES_REDHAT:
   - libcurl-devel
   - libjpeg-turbo-devel
   - libpng-devel
-  - libsquish-devel
   - libtool
   - libvorbis-devel
   - openal-soft-devel
