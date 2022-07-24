@@ -43,11 +43,6 @@
     dest: "{{ APP_SRC }}"
     version: "{{ APP_TAG }}"
   when: not APP_README_PATH.stat.exists and CLONE_REPO.failed
-- name: "Run the svn cleanup in case subversion failed"
-  shell:
-    cmd: svn cleanup
-    chdir: "{{ APP_ASSETS_SRC }}"
-  ignore_errors: true
 - name: "Clone the stk-assets source code into {{ APP_ASSETS_SRC }}"
   ansible.builtin.subversion:
     repo: "{{ APP_ASSETS_REPO }}"
@@ -77,7 +72,7 @@
   file:
     name: "{{ APP_SRC }}/cmake_build"
     state: directory
-- name: "Run the cmake script in {{ APP_SRC }}/cmake_build"
+- name: "Run the cmake script in {{ APP_SRC }}/cmake_build: cmake ..  -DBUILD_RECORDER=0 -DCMAKE_INSTALL_PREFIX={{ APP_PREFIX }}"
   shell:
     cmd: "cmake ..  -DBUILD_RECORDER=0 -DCMAKE_INSTALL_PREFIX={{ APP_PREFIX }}"
     chdir: "{{ APP_SRC }}/cmake_build"
