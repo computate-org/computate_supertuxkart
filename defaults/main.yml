@@ -22,6 +22,7 @@ APP_DEPENDENCIES_REDHAT:
   - openssl-devel 
   - pkgconf
   - zlib-devel
+  - libsquish-devel
 APP_DEPENDENCIES: "{{ APP_DEPENDENCIES_REDHAT if ansible_distribution_file_variety == 'RedHat' else APP_DEPENDENCIES_REDHAT }}"
 APP_NAME: supertuxkart
 APP_DISPLAY_NAME: Super Tux Kart
@@ -37,7 +38,7 @@ APP_REPO_SSH: git@github.com:supertuxkart/stk-code.git
 APP_REPO_HTTPS: "{{ APP_REPO_SSH | replace('git@github.com:', 'https://github.com/') }}"
 APP_ASSETS_REPO: https://svn.code.sf.net/p/supertuxkart/code/stk-assets
 APP_TAG: 1.3
-APP_DESKTOP: "{{ APP_PREFIX }}/.local/share/applications/{{ APP_NAME }}.desktop"
+APP_DESKTOP: "{{ APP_PREFIX }}/share/applications/{{ APP_NAME }}.desktop"
 APP_README: "{{ APP_SRC }}/README.md"
 APP_ICON: "{{ APP_SHARE }}/data/supertuxkart_1024.png"
 APP_EXEC: "{{ APP_PREFIX }}/bin/supertuxkart"

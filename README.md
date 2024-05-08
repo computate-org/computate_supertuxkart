@@ -1,5 +1,9 @@
 # Install supertuxkart
 
+## Prerequisites
+
+- Install https://github.com/computate-org/computate_powertools
+
 ## Install the latest Python and setup a new Python virtualenv
 
 ```bash
